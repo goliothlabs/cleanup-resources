@@ -1,0 +1,29 @@
+name: "Cleanup Golioth Release"
+description: "Cleanup Golioth Cloud resources like devices, artifacts and releases."
+branding:
+  icon: "cpu"
+  color: "green"
+
+inputs:
+  release:
+    description: "Release ID."
+    required: true
+  version:
+    description: "Artifact version."
+    required: true
+  package:
+    description: "Artifact package."
+    required: true
+  device:
+    description: "Device ID."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: goliothctl dfu release delete --id ${{ inputs.release }}
+      shell: bash
+    - run: goliothctl dfu artifact ${{ inputs.version }} --pkg ${{ inputs.package }}
+      shell: bash
+    - run: goliothctl device delete --id ${{ inputs.device }}
+      shell: bash
